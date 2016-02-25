@@ -1,0 +1,20 @@
+(* 誕生日の月と日受け取ったら、正座を返す *)
+let seiza month day =
+	if ( 0 <= (month * 100 + day) && (month * 100 + day) <=  120) then "山羊座"
+	else if ( 121 <= (month * 100 + day) && (month * 100 + day) <= 218) then "水瓶座"
+	else if ( 219 <= (month * 100 + day) && (month * 100 + day) <= 320) then "魚座"
+	else if ( 321 <= (month * 100 + day) && (month * 100 + day) <= 419) then "牡羊座"
+	else if ( 420 <= (month * 100 + day) && (month * 100 + day) <= 520) then "牡牛座"
+	else if ( 521 <= (month * 100 + day) && (month * 100 + day) <= 621) then "双子座"
+	else if ( 622 <= (month * 100 + day) && (month * 100 + day) <= 722) then "蟹座"
+	else if ( 723 <= (month * 100 + day) && (month * 100 + day) <= 822) then "獅子座"
+	else if ( 823 <= (month * 100 + day) && (month * 100 + day) <= 922) then "乙女座"
+	else if ( 923 <= (month * 100 + day) && (month * 100 + day) <= 1023) then "天秤座"
+	else if ( 1024 <= (month * 100 + day) && (month * 100 + day) <= 1122) then "蠍座"
+	else if ( 1123 <= (month * 100 + day) && (month * 100 + day) <= 1221) then "射手座"
+	else if ( 1222 <= (month * 100 + day) && (month * 100 + day) <= 1231) then "山羊座"
+	else ""
+
+let t1 = seiza 9 21 = "乙女座"
+let t2 = seiza 1 19 = "山羊座"
+let t3 = seiza 12 31 = "山羊座"
