@@ -8,3 +8,4 @@ let equal_length list1 list2 = match (list1, list2) with
 let t1 = equal_length [1;2] ["b"] = false
 let t2 = equal_length [1;2] ["b";"a"] = true
 let t3 = equal_length [] [] = true
+let t4 = equal_length [1] [] = false
