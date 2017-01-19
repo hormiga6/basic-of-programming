@@ -19,7 +19,9 @@ let koushin1 p q =
 	let {nammae=q_namae;saitankyori=q_saitankyori;temae_list=q_temae_list;} = q in
 	let kyori = connected p_namae q_namae global_ekikan_list in
 	if  kyori != infinity
-		then {nammae=q_namae;saitankyori=kyori +. p_saitankyori;temae_list=q_namae::p_temae_list;}
+		then if p_saitankyori < q_saitankyori
+				then {nammae=q_namae;saitankyori=kyori +. p_saitankyori;temae_list=q_namae::p_temae_list;}
+				else q
 		else q
 
 (* 開始点: 代々木上原
@@ -34,7 +36,6 @@ let t2 = koushin1
 			{nammae="代々木公園"; saitankyori=1.0; temae_list=["代々木公園"; "代々木上原"];}
 			{nammae="大手町"; saitankyori=infinity; temae_list=[];}
 		= {nammae="大手町"; saitankyori=infinity; temae_list=[];}
-
 
 (* 直前に確定した駅qと未確定の駅のリストvを受け取ったら、必要な更新処理を行った後の未確定の駅のリストを返す *)
 let koushin q v = List.map (koushin1 q) v
