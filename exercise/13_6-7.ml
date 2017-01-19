@@ -19,25 +19,29 @@ let koushin1 p q =
 	let {nammae=q_namae;saitankyori=q_saitankyori;temae_list=q_temae_list;} = q in
 	let kyori = connected p_namae q_namae global_ekikan_list in
 	if  kyori != infinity
-		then {nammae=q_namae;saitankyori=kyori;temae_list=[p_namae];}
+		then {nammae=q_namae;saitankyori=kyori +. p_saitankyori;temae_list=q_namae::p_temae_list;}
 		else q
 
+(* 開始点: 代々木上原
+   確定点: 代々木公園
+ *)
 let t1 = koushin1
-			{nammae="明治神宮前"; saitankyori=0.; temae_list=["明治神宮前"];}
-			{nammae="代々木公園"; saitankyori=infinity; temae_list=[];}
-		= {nammae="代々木公園"; saitankyori=1.2; temae_list=["明治神宮前"];}
+			{nammae="代々木公園"; saitankyori=1.0; temae_list=["代々木公園"; "代々木上原"];}
+			{nammae="明治神宮前"; saitankyori=infinity; temae_list=[];}
+		= {nammae="明治神宮前"; saitankyori=2.2; temae_list=["明治神宮前";"代々木公園"; "代々木上原"];}
 
 let t2 = koushin1
-			{nammae="明治神宮前"; saitankyori=0.; temae_list=["明治神宮前"];}
-			{nammae="代々木上原"; saitankyori=infinity; temae_list=[];}
-		= {nammae="代々木上原"; saitankyori=infinity; temae_list=[];}
+			{nammae="代々木公園"; saitankyori=1.0; temae_list=["代々木公園"; "代々木上原"];}
+			{nammae="大手町"; saitankyori=infinity; temae_list=[];}
+		= {nammae="大手町"; saitankyori=infinity; temae_list=[];}
+
 
 (* 直前に確定した駅qと未確定の駅のリストvを受け取ったら、必要な更新処理を行った後の未確定の駅のリストを返す *)
 let koushin q v = List.map (koushin1 q) v
 
 let t1 = koushin
-			{nammae="明治神宮前"; saitankyori=0.; temae_list=["明治神宮前"];}
-			[{nammae="代々木公園"; saitankyori=infinity; temae_list=[];};
- 			 {nammae="代々木上原"; saitankyori=infinity; temae_list=[];}]
- 		= 	[{nammae="代々木公園"; saitankyori=1.2; temae_list=["明治神宮前"];};
- 			 {nammae="代々木上原"; saitankyori=infinity; temae_list=[];}]
+			{nammae="代々木公園"; saitankyori=1.0; temae_list=["代々木公園"; "代々木上原"];}
+			[{nammae="明治神宮前"; saitankyori=infinity; temae_list=[];};
+ 			 {nammae="大手町"; saitankyori=infinity; temae_list=[];}]
+ 		= 	[{nammae="明治神宮前"; saitankyori=2.2; temae_list=["明治神宮前";"代々木公園"; "代々木上原"];};
+ 			 {nammae="大手町"; saitankyori=infinity; temae_list=[];}]
