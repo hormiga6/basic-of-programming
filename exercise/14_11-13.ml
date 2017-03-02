@@ -94,24 +94,22 @@ let t2 = make_initial_eki_list [
 (* 直前に確定した駅p(eki_t型)と未確定の駅のリストv(eki_t list型)を受け取ったら、必要な更新処理を行った後の未確定の駅のリストを返す *)
 let koushin p v =
 	let {nammae=kakutei_namae;saitankyori=kakutei_saitankyori;temae_list=kakutei_temae_list;} = p in
+	let rec connected nammae_1 nammae_2 ekikan_list = match ekikan_list with
+				| [] -> infinity
+				| {kiten=kiten; shuten=shuten; keiyu=keiyu; kyori=kyori; jikan=jikan}::rest ->
+					if (kiten = nammae_1 && shuten = nammae_2) || (kiten = nammae_2 && shuten = nammae_1)
+						then kyori else connected nammae_1 nammae_2 rest in
  	List.map (fun mikakuteki ->
 		let {nammae=mikakuteki_namae;saitankyori=mikakuteki_saitankyori;temae_list=mikakuteki_temae_list;} = mikakuteki in
-		let rec connected nammae_1 nammae_2 ekikan_list = match ekikan_list with
-					| [] -> infinity
-					| {kiten=kiten; shuten=shuten; keiyu=keiyu; kyori=kyori; jikan=jikan}::rest ->
-						if (kiten = nammae_1 && shuten = nammae_2) || (kiten = nammae_2 && shuten = nammae_1)
-							then kyori else connected nammae_1 nammae_2 rest in
 		let kyori = connected kakutei_namae mikakuteki_namae global_ekikan_list in
-		if  kyori != infinity
-			then if (kakutei_saitankyori +. kyori) < mikakuteki_saitankyori
-					then {nammae=mikakuteki_namae;saitankyori=kakutei_saitankyori +. kyori;temae_list=mikakuteki_namae::kakutei_temae_list;}
-					else mikakuteki
-			else mikakuteki
+		if (kakutei_saitankyori +. kyori) < mikakuteki_saitankyori
+		then {nammae=mikakuteki_namae;saitankyori=kakutei_saitankyori +. kyori;temae_list=mikakuteki_namae::kakutei_temae_list;}
+		else mikakuteki
 	) v
 
 let t1 = koushin
-			{nammae="代々木公園"; saitankyori=1.0; temae_list=["代々木公園"; "代々木上原"];}
-			[{nammae="明治神宮前"; saitankyori=infinity; temae_list=[];};
- 			 {nammae="大手町"; saitankyori=infinity; temae_list=[];}]
- 		= 	[{nammae="明治神宮前"; saitankyori=2.2; temae_list=["明治神宮前";"代々木公園"; "代々木上原"];};
- 			 {nammae="大手町"; saitankyori=infinity; temae_list=[];}]
+		{nammae="代々木公園"; saitankyori=1.0; temae_list=["代々木公園"; "代々木上原"];}
+		[{nammae="明治神宮前"; saitankyori=infinity; temae_list=[];};
+		 {nammae="大手町"; saitankyori=infinity; temae_list=[];}]
+	= 	[{nammae="明治神宮前"; saitankyori=2.2; temae_list=["明治神宮前";"代々木公園"; "代々木上原"];};
+		 {nammae="大手町"; saitankyori=infinity; temae_list=[];}]
